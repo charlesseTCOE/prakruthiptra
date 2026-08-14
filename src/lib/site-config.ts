@@ -4,7 +4,7 @@
 export const siteConfig = {
   name: "Prakruthi Township Residents Association",
   shortName: "PTRA",
-  tagline: "Welcome to Prakruthi Township",
+  tagline: "Welcome to Prakruthi Township Residents Association",
   description:
     "News, updates and community links for residents of Prakruthi Township — maintained by the Residents Association.",
   url: "https://prakruthitownshipresidentsassociation.co.in",
