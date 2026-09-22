@@ -1,32 +1,32 @@
 # Security
 
-This site is intentionally simple, which is itself a security measure —
-fewer moving parts means fewer things that can be attacked.
+Threat model now includes a public form, an admin cookie, and Google Drive uploads. The site still has no application database.
 
-- **No backend, no database, no login.** The whole site is pre-rendered
-  static HTML at build time. There's no server-side code processing user
-  input, so there's no SQL injection, no auth to breach, and no user data
-  stored anywhere.
-- **No forms.** Nothing on the site accepts input from visitors.
-- **HTTPS everywhere**, enforced via HSTS (`Strict-Transport-Security`),
-  automatically on Vercel.
-- **Content-Security-Policy** locked down to `self` plus the specific
-  Twitter/X domains needed for the embedded feed — no other third-party
-  scripts can run even if injected.
-- **Clickjacking protection** via `X-Frame-Options: SAMEORIGIN` and
-  `frame-ancestors 'self'`.
-- **MIME-sniffing protection** via `X-Content-Type-Options: nosniff`.
-- No `X-Powered-By` header (removes a low-value fingerprinting signal).
+## Controls in place
 
-## Keeping it that way
+- HTTPS + HSTS on Vercel
+- CSP default `self`; Font Awesome CSS/fonts only from cdnjs (hashed stylesheet)
+- `X-Frame-Options: SAMEORIGIN`, `frame-ancestors 'self'`
+- `X-Content-Type-Options: nosniff`
+- `poweredByHeader: false`
+- Admin: only `ADMIN_EMAIL_1` / `ADMIN_EMAIL_2` + `ADMIN_PASSWORD`
+- Cookie: HttpOnly, SameSite=Strict, 24h, timing-safe compare
+- Jobs files: PDF/Word only, 8 MB cap, Jobs topic only
+- Filenames sanitised before Drive write
+- Drive folder must stay private (share with the service account + committee only)
+- No Gmail password stored
 
-- Only add npm packages you actually need — each dependency is code you're
-  trusting. Run `npm audit` occasionally.
-- If you ever add a contact form, comment box, or anything else that takes
-  visitor input, that changes the threat model — come back and revisit
-  this file (and the CSP in `next.config.ts`) before shipping it.
-- Only people with push access to the GitHub repo (or direct Vercel
-  access) can change the live site — treat repo access the same way
-  you'd treat a website admin password.
-- Keep dependencies updated: `npm outdated`, then `npm update`, then
-  rebuild and check the site still looks right before pushing.
+## What submissions do **not** do
+
+They do **not** land in prakruthiptra@gmail.com by themselves.  
+They land in the Google Drive folder set by `GOOGLE_DRIVE_FOLDER_ID`.  
+Committee reads them in Drive or at `/admin`.
+
+`prakruthiptra@gmail.com` is still the public address for advertise requests and ordinary mail.
+
+## Before every release
+
+1. `npm audit`
+2. Confirm `.env.local` and service-account JSON are not in git
+3. Confirm the Drive folder is not “anyone with the link”
+4. Rotate `ADMIN_PASSWORD` when an office-bearer leaves
