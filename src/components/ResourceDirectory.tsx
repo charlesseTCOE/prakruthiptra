@@ -1,0 +1,13 @@
+"use client";
+import { useState } from "react";
+import { helplines, resourceReviewDate, serviceLinks } from "@/lib/resident-resources";
+export default function ResourceDirectory() {
+ const [query,setQuery]=useState("");
+ const [category,setCategory]=useState("All contacts");
+ const contacts=helplines.filter(item=>(category==="All contacts"||category===item.category)&&`${item.name} ${item.number} ${item.description}`.toLowerCase().includes(query.trim().toLowerCase()));
+ return <><div className="emergency-banner"><div><strong>Need urgent help?</strong><p>For an immediate emergency, contact the service directly. PTRA email and social channels are not emergency services.</p></div><a href="tel:112" className="button">112</a></div>
+ <div className="updates-tools"><div className="filter-tabs" role="group" aria-label="Filter contacts">{["All contacts","Emergency","Civic services","Safety & support"].map(item=><button type="button" aria-pressed={item===category} key={item} onClick={()=>setCategory(item)}>{item}</button>)}</div><label className="search-field"><span className="sr-only">Search helplines</span><input type="search" placeholder="Search service or number…" value={query} onChange={event=>setQuery(event.target.value)}/></label></div>
+ <p className="result-count" role="status">{contacts.length} contacts · Directory reviewed {resourceReviewDate}</p><div className="helpline-grid">{contacts.map(item=><article className="helpline-card" key={item.number}><span className="tag">{item.category}</span><h2>{item.name}</h2><a className="phone-number" href={`tel:${item.number}`} aria-label={`Call ${item.name} on ${item.number}`}>{item.number}</a><p>{item.description}</p><details><summary>Source & review note</summary><p>{item.note}</p><a href={item.source} target="_blank" rel="noopener noreferrer">View source ↗</a></details></article>)}</div>
+ {!contacts.length&&<div className="empty-state"><h2>No matching contacts</h2><button className="button" onClick={()=>{setQuery("");setCategory("All contacts");}}>Clear filters</button></div>}
+ <div className="section-heading directory-heading"><div><p className="eyebrow">GO STRAIGHT TO THE SOURCE</p><h2>Civic services &amp; useful portals.</h2></div></div><div className="portal-grid">{serviceLinks.map(item=><a key={item.name} href={item.href} target="_blank" rel="noopener noreferrer"><strong>{item.name} ↗</strong><p>{item.detail}</p></a>)}</div><p className="directory-note">Some government portals were unavailable during review. If a portal does not open, use the relevant helpline or the authority’s main website. Do not share identity documents, account details or payment information in public posts.</p></>;
+}

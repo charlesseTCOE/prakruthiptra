@@ -8,7 +8,7 @@ const channels = [
     name: "Greater Bengaluru Authority",
     handle: "@GBA_office",
     href: siteConfig.civicFeeds.gba.url,
-    blurb: "City-wide civic notices, SIR reminders, and ward-level updates from Bengaluru's apex civic body.",
+    blurb: "Civic notices and city-wide announcements from the Greater Bengaluru Authority.",
     Icon: XIcon,
     accent: "bg-moss",
   },
@@ -39,16 +39,18 @@ const followRow = [
 export default function ChannelCards() {
   return (
     <div>
-      <div className="grid gap-6 sm:grid-cols-3">
+      <div className="social-feature"><div><span className="tag">PTRA ON X / TWITTER</span><h3>Neighbourhood news.<br/>An ongoing conversation.</h3><p>Open our X profile for PTRA posts and announcements. Explore the civic channels below for wider Bengaluru updates.</p><a className="button" href={siteConfig.social.twitter} target="_blank" rel="noopener noreferrer">Open @PTRAOfficialAcc ↗</a></div><div className="spaces-panel"><span className="eyebrow">X SPACES · COMMUNITY CONVERSATIONS</span><h3>Listen. Share. Stay connected.</h3><p>{siteConfig.xSpace ? siteConfig.xSpace.title : "Any upcoming PTRA audio conversations will be announced on our X profile. No Space is currently listed on this website."}</p><a className="text-link" href={siteConfig.xSpace?.url ?? siteConfig.social.twitter} target="_blank" rel="noopener noreferrer">{siteConfig.xSpace ? "Open the Space ↗" : "Check PTRA announcements ↗"}</a></div></div>
+      <div className="section-heading"><div><p className="eyebrow">COMMUNITY & CIVIC CHANNELS</p><p className="directory-note">These links open on X. Sign-in may be required; posts are not mirrored on this website.</p></div></div>
+      <div className="channel-grid">
         {channels.map(({ name, handle, href, blurb, Icon, accent }) => (
           <a
             key={handle}
             href={href}
             target="_blank"
             rel="noopener noreferrer"
-            className="group flex flex-col bg-white rounded-xl border border-line shadow-sm hover:shadow-md hover:-translate-y-1 transition-all overflow-hidden"
+            className="channel-card group flex flex-col"
           >
-            <div className={`h-1.5 ${accent}`} />
+            <div className={`channel-accent ${accent}`} />
             <div className="p-5 flex flex-col flex-1">
               <div className="flex items-center gap-3 mb-3">
                 <span className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-pine text-sage">

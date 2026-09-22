@@ -11,6 +11,7 @@ export type PostMeta = {
   title: string;
   date: string;
   excerpt: string;
+  category: string;
 };
 
 export function getAllPosts(): PostMeta[] {
@@ -25,13 +26,14 @@ export function getAllPosts(): PostMeta[] {
 
     return {
       slug,
-      title: data.title ?? slug,
-      date: data.date ?? "",
-      excerpt: data.excerpt ?? "",
+      title: String(data.title ?? slug),
+      date: data.date instanceof Date ? data.date.toISOString().slice(0, 10) : String(data.date ?? ""),
+      excerpt: String(data.excerpt ?? ""),
+      category: String(data.category ?? ""),
     };
   });
 
-  return posts.sort((a, b) => (a.date < b.date ? 1 : -1));
+  return posts.sort((a, b) => b.date.localeCompare(a.date) || a.title.localeCompare(b.title));
 }
 
 export function getPostSlugs(): string[] {
@@ -40,6 +42,7 @@ export function getPostSlugs(): string[] {
 }
 
 export async function getPostBySlug(slug: string) {
+  if (!getPostSlugs().includes(slug)) throw new Error("Post not found");
   const fullPath = path.join(postsDirectory, `${slug}.md`);
   const fileContents = fs.readFileSync(fullPath, "utf8");
   const { data, content } = matter(fileContents);
@@ -49,9 +52,10 @@ export async function getPostBySlug(slug: string) {
 
   return {
     slug,
-    title: data.title ?? slug,
-    date: data.date ?? "",
-    excerpt: data.excerpt ?? "",
+    title: String(data.title ?? slug),
+    date: data.date instanceof Date ? data.date.toISOString().slice(0, 10) : String(data.date ?? ""),
+    excerpt: String(data.excerpt ?? ""),
+    category: String(data.category ?? ""),
     contentHtml,
   };
 }

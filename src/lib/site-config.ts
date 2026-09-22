@@ -9,6 +9,9 @@ export const siteConfig = {
     "News, updates and community links for residents of Prakruthi Township — maintained by the Residents Association.",
   url: "https://prakruthitownshipresidentsassociation.co.in",
 
+  // Add a real scheduled or recorded X Space here when available.
+  xSpace: null as { title: string; url: string } | null,
+
   social: {
     facebook: "https://www.facebook.com/Prakruthiptra",
     instagram: "https://instagram.com/prakruthiptra",
