@@ -20,7 +20,7 @@ export default function JobsPage() {
             </h1>
             <p className="mt-4 text-moss-2 max-w-lg leading-relaxed">
               Household help, tutoring, site work and resident-to-resident roles.
-              Introduce yourself using the application form below.
+              Prepare an email application below. For jobs shared on our homepage, follow the employer’s original application instructions.
             </p>
           </div>
           <Link
@@ -36,7 +36,7 @@ export default function JobsPage() {
         <section id="apply">
           <p className="label text-clay mb-3">YOUR APPLICATION</p>
           <h2 className="font-display text-3xl text-moss mb-2">Tell us about yourself.</h2>
-          <p className="text-moss-2 mb-6">Share your experience and optionally attach a résumé or profile.</p>
+          <p className="text-moss-2 mb-6">Share your experience by email with PTRA. Attach your résumé or profile in your email app before sending.</p>
           <ApplyForm defaultTopic="Jobs / local work" />
         </section>
       </section>

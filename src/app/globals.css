@@ -373,6 +373,8 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 
 /* October reference theme: midnight navy, vivid orange, white cards. */
 .job-postings-list { display: grid; gap: 24px; }
+.email-draft-panel { overflow-wrap: anywhere; }
+.email-draft-panel .button { max-width: 100%; }
 .advertise-home { margin-block: 38px 10px; }
 .advertise-home-panel { display: grid; grid-template-columns: minmax(0,1.3fr) minmax(0,1fr); align-items: center; gap: 36px; padding: 36px; border-radius: 18px; background: #17243e; color: white; border-top: 5px solid #ff7817; }
 .advertise-home-panel .eyebrow { color: #ffab6e; margin-bottom: 10px; }

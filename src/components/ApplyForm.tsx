@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
+import { siteConfig } from "@/lib/site-config";
 
 const topics = [
   "Jobs / local work",
@@ -13,63 +14,22 @@ const topics = [
 ];
 
 export default function ApplyForm({ defaultTopic = "" }: { defaultTopic?: string }) {
-  const [status, setStatus] = useState("");
-  const [ok, setOk] = useState(false);
-  const [busy, setBusy] = useState(false);
   const [topic, setTopic] = useState(defaultTopic);
-  const [fileName, setFileName] = useState("");
-  const showFile = useMemo(() => topic === "Jobs / local work", [topic]);
+  const [draft, setDraft] = useState<{ subject: string; body: string; href: string } | null>(null);
+  const isJob = topic === "Jobs / local work";
 
-  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const form = e.currentTarget;
-    setBusy(true);
-    setStatus("");
-    setOk(false);
-    try {
-      const res = await fetch("/api/applications", { method: "POST", body: new FormData(form) });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Could not send.");
-      setOk(true);
-      setStatus(
-        topic === "Jobs / local work"
-          ? "Job application submitted successfully. The Office Bearers will review it."
-          : "Message sent successfully. The Office Bearers have received it for review."
-      );
-      form.reset();
-      setTopic(defaultTopic);
-      setFileName("");
-    } catch (err) {
-      setStatus(err instanceof Error ? err.message : "Could not send.");
-    } finally {
-      setBusy(false);
-    }
+    const data = new FormData(e.currentTarget);
+    const value = (key: string) => String(data.get(key) ?? "").trim();
+    const subject = `PTRA ${isJob ? "job application" : "message"}: ${topic} — ${value("fullName")}`;
+    const body = `Dear PTRA Office Bearers,\n\nName: ${value("fullName")}\nPhone: ${value("phone")}\nEmail: ${value("email")}\nTopic: ${topic}\n\n${value("note")}\n\nRegards,\n${value("fullName")}`;
+    setDraft({ subject, body, href: `mailto:${siteConfig.contact.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}` });
   }
 
   return (
-    <form onSubmit={onSubmit} className="workflow-form rounded-[28px] border border-line bg-white shadow-[0_24px_60px_-36px_rgba(20,32,26,0.55)] p-6 sm:p-8 space-y-5">
-      {showFile && (
-        <label className="block sm:col-span-2 cursor-pointer">
-          <span className="inline-flex items-center gap-2 label text-clay mb-2">
-            Jobs attachment
-
-          </span>
-          <span className="flex flex-col items-center justify-center gap-2 rounded-3xl border-2 border-dashed border-ochre bg-ochre/12 px-4 py-8 text-center hover:bg-ochre/18 transition-colors">
-            <span className="font-display text-xl text-moss">Choose a PDF or Word file</span>
-            <span className="text-sm text-moss-2">
-              {fileName ? `Selected · ${fileName}` : "Optional résumé or profile, up to 8 MB."}
-            </span>
-
-          </span>
-          <input
-            name="file"
-            type="file"
-            accept=".pdf,.doc,.docx,application/pdf"
-            className="mt-3"
-            onChange={(e) => setFileName(e.target.files?.[0]?.name ?? "")}
-          />
-        </label>
-      )}
+    <form onSubmit={onSubmit} onChange={() => setDraft(null)} className="workflow-form rounded-[28px] border border-line bg-white shadow-[0_24px_60px_-36px_rgba(20,32,26,0.55)] p-6 sm:p-8 space-y-5">
+      <div className="notice-banner"><strong>{isJob ? "Apply by email" : "Write to us by email"}</strong><p>Fill in your details to prepare an email to {siteConfig.contact.email}. You will need to press Send in your email app.</p>{isJob && <p><strong>Attach your résumé or profile directly in the email app before sending.</strong> This page does not upload files.</p>}</div>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="block text-sm text-moss-2">
@@ -107,24 +67,16 @@ export default function ApplyForm({ defaultTopic = "" }: { defaultTopic?: string
         </label>
       </div>
       <button
-        disabled={busy}
+        type="submit"
         className="inline-flex items-center px-6 py-3 rounded-full bg-moss text-sage text-sm font-medium hover:bg-pine disabled:opacity-60"
       >
-        {busy ? "Sending…" : showFile ? "Send note + attachment" : "Send to the association"}
+        Prepare email
       </button>
-      {status && (
-        <div
-          role={ok ? "status" : "alert"}
-          aria-live="polite"
-          className={ok ? "submission-message submission-success" : "submission-message submission-error"}
-        >
-          <span aria-hidden="true" className="submission-icon">{ok ? "✓" : "!"}</span>
-          <div>
-            <strong>{ok ? "Successfully submitted" : "Submission not sent"}</strong>
-            <p>{status}</p>
-          </div>
-        </div>
-      )}
+      {draft && <div className="email-draft-panel">
+        <div role="status" className="notice-banner"><strong>Email prepared — not sent yet.</strong><p>Open your email app below, review the draft{isJob ? ", attach your résumé if needed," : ""} and press Send.</p></div>
+        <a className="button" href={draft.href}>Open email app ↗</a>
+        <details className="mt-5"><summary className="cursor-pointer py-3 font-bold">No email app? Copy the details into Gmail or Outlook</summary><p className="mt-3">To: <strong>{siteConfig.contact.email}</strong></p><p className="my-3">Subject: {draft.subject}</p><label className="block">Email message<textarea readOnly value={draft.body} rows={9} className="w-full border border-line rounded-lg p-3 mt-2" onFocus={e => e.target.select()} /></label><p className="mt-3">The website cannot confirm email delivery. Check your email app’s Sent folder after sending.</p></details>
+      </div>}
     </form>
   );
 }

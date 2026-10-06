@@ -4,6 +4,10 @@ Navy, orange and white Next.js website for Prakruthi Township Residents Associat
 
 ## October 2026 reference-theme update
 
+### Current submission mode: email
+
+Jobs and Write to Us now prepare email drafts addressed to `prakruthiptra@gmail.com`. Residents click Prepare email, then Open email app, attach any résumé in their email client and press Send. A copyable message fallback is available for webmail. Preparing a draft does not send it, and the website does not claim delivery. Neither page uploads attachments or calls the Drive submission API. Emails arrive in the PTRA mailbox, not the website Admin inbox. Existing Drive backend code remains for a future configured integration; personal-Drive OAuth is not implemented. The earlier submission-flow descriptions below describe the previous edition.
+
 ### Add or remove homepage job postings
 
 Edit `src/lib/job-postings.ts`. Copy an existing object inside the `jobPostings` array, change its unique `id`, `title`, `category`, `source`, `description`, HTTPS `url` and `buttonLabel`, and leave `active: true`. All active entries appear as cards on the homepage. To hide a closed role, set `active: false`. Save, test locally and redeploy to Vercel. These are code-managed postings; the Admin screen does not edit this list. No Google Drive is needed.

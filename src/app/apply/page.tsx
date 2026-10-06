@@ -15,7 +15,7 @@ export default function ApplyPage() {
         </h1>
         <p className="mt-4 max-w-xl text-moss-2 leading-relaxed">
           Introductions, vendor notes, housing or a question for the committee.
-          Your message is submitted privately for committee review. Only approved listings are published.
+          Prepare an email to the PTRA Office Bearers, then send it from your email app. Preparing a draft does not submit or publish your message.
         </p>
         <div className="mt-10">
           <ApplyForm />
