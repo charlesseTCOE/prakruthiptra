@@ -17,6 +17,11 @@ try {
  await page.screenshot({path:'qa/home-desktop.png',fullPage:true});
  const assert=(v,m)=>{if(!v)throw new Error(m);};
  assert(await page.locator('h1').count()===1,'Single home h1');
+ assert(await page.locator('#job-postings a[href="https://www.linkedin.com/posts/madanpadaki_hiring-alert-janai-engineering-interns-program-share-7508457194854506496-9G5k"]').count()===1,'LinkedIn opportunity renders without Drive configuration');
+ await page.locator('#job-postings').screenshot({path:'qa/job-posting-desktop.png'});
+ assert(await page.getByRole('heading',{name:'Advertise here.',exact:true}).count()===1,'Homepage advertising block');
+ assert((await page.getByRole('link',{name:'Enquire about advertising'}).getAttribute('href')).startsWith('mailto:prakruthiptra@gmail.com?'),'Advertising enquiry uses email without Drive');
+ await page.locator('.advertise-home').screenshot({path:'qa/advertise-home-desktop.png'});
  assert(await page.locator('a[href="/resources"]').count()>0,'Resources links');
  await page.goto('http://127.0.0.1:3100/blog');
  assert(await page.locator('.post-card').count()===15,'All fifteen articles present');

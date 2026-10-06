@@ -1,6 +1,22 @@
 # PTRA community website
 
-White-and-red Next.js website for Prakruthi Township Residents Association. Includes a responsive homepage, searchable updates, a searchable resident directory, and X/social channel links.
+Navy, orange and white Next.js website for Prakruthi Township Residents Association. Includes a responsive homepage, manually curated external job opportunities, searchable updates, a searchable resident directory, and X/social channel links.
+
+## October 2026 reference-theme update
+
+### Add or remove homepage job postings
+
+Edit `src/lib/job-postings.ts`. Copy an existing object inside the `jobPostings` array, change its unique `id`, `title`, `category`, `source`, `description`, HTTPS `url` and `buttonLabel`, and leave `active: true`. All active entries appear as cards on the homepage. To hide a closed role, set `active: false`. Save, test locally and redeploy to Vercel. These are code-managed postings; the Admin screen does not edit this list. No Google Drive is needed.
+
+The homepage also includes an Advertise here block immediately after Job postings. Its enquiry button opens an email draft to the configured PTRA address. Email enquiries do not require Drive, and sending one does not automatically publish an advertisement.
+
+The current theme follows the supplied screenshots: dark navy header and hero, bold sans-serif headings, vivid orange actions and highlights, white cards and pale blue-grey section backgrounds. Large resident-friendly typography is retained. The homepage resident desk provides prominent shortcuts to helplines, jobs and Office Bearers.
+
+The homepage Job postings card links directly to the supplied JanAI Engineering Interns Program LinkedIn announcement. It is defined in `src/components/FeaturedJobs.tsx` and works with no Google Drive credentials. Tracking parameters were removed from the supplied link. Full LinkedIn post details could not be retrieved, so no eligibility, pay, deadline or current vacancy guarantee has been added. The employer's original post provides application instructions.
+
+Google Drive integration remains as supplied and is not connected by this update. File uploads and private messages still require working backend credentials. This package does not implement the previously discussed personal-Drive OAuth flow. No production deployment was performed.
+
+Desktop/mobile screenshots are in `qa/`, including a close-up of the homepage job card. Theme and job-card updates passed the production build, lint and browser checks using an unconfigured Drive test environment.
 
 ## Run locally
 

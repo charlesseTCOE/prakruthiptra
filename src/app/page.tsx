@@ -1,5 +1,6 @@
 import Link from "next/link";
-import CommunityScene from "@/components/CommunityScene";
+import FeaturedJobs from "@/components/FeaturedJobs";
+import AdvertiseHere from "@/components/AdvertiseHere";
 import ChannelCards from "@/components/ChannelCards";
 import PostCard from "@/components/PostCard";
 import AdBoard from "@/components/AdBoard";
@@ -17,16 +18,17 @@ export const dynamic = "force-dynamic";
 export default function Home() {
   const posts = getAllPosts().slice(0, 3);
   return <>
-    <section className="hero shell">
+    <div className="hero-backdrop"><section className="hero shell">
       <div className="hero-copy"><p className="eyebrow"><span className="status-dot"/> THE PTRA COMMUNITY</p>
         <h1>A neighbourhood.<br/>A community.<br/><em>A place to belong.</em></h1>
         <p className="hero-description">Welcome to Prakruthi Township Residents Association. Your home for community news, helpful resources, and the connections that bring us together.</p>
         <div className="hero-actions"><Link className="button" href="/blog">Explore the latest updates <span aria-hidden="true">↗</span></Link><Link href="/#about" className="text-link">Get to know PTRA <span aria-hidden="true">→</span></Link></div>
         <div className="hero-footnote"><LeafIcon className="w-4 h-4"/><span>Stronger together. Greener tomorrow.</span></div>
-      </div><CommunityScene/>
-    </section>
+      </div><aside className="resident-desk"><p className="eyebrow">YOUR RESIDENT DESK</p><h2>How can we help?</h2><p>Useful contacts, community news and a direct connection to PTRA.</p><Link href="/resources"><strong>Helplines &amp; civic services</strong><span>Find the right contact for your concern →</span></Link><Link href="#job-postings"><strong>Jobs &amp; opportunities</strong><span>Explore an opportunity shared with residents →</span></Link><Link href="/apply"><strong>Write to the Office Bearers</strong><span>Share a question or a neighbourhood concern →</span></Link><div className="resident-desk-note">For immediate emergencies: <a href="tel:112">112</a></div></aside>
+    </section></div>
     <section className="shell shortcuts" aria-label="Quick links">{shortcuts.map(({Icon,number,title,text,href}) => <Link href={href} key={number} className="shortcut"><span className="shortcut-icon"><Icon className="w-5 h-5"/></span><span><strong>{title}</strong><small>{text}</small></span><span className="shortcut-arrow" aria-hidden="true">↗</span></Link>)}</section>
-    <section className="shell"><div className="jobs-promo"><div><p className="eyebrow">OPPORTUNITIES CLOSE TO HOME</p><h2>Local work. Local connections.</h2><p>Browse community jobs, send an application, or write to the committee.</p></div><div className="jobs-promo-actions"><Link className="button" href="/jobs">Jobs &amp; applications →</Link><Link className="text-link" href="/apply">Write to us →</Link></div></div></section>
+    <FeaturedJobs />
+    <AdvertiseHere />
     <section className="section shell" id="updates"><div className="section-heading"><div><p className="eyebrow">THE COMMUNITY NOTICEBOARD</p><h2>Good to know. Easy to find.</h2></div><Link href="/blog" className="text-link">All updates <span aria-hidden="true">↗</span></Link></div>
       <div className="post-grid">{posts.length ? posts.map(post => <PostCard key={post.slug} post={post}/>) : <p>Community updates will appear here soon.</p>}</div>
     </section>
